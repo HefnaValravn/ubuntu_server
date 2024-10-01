@@ -55,3 +55,7 @@ root	ALL=(ALL:ALL) ALL
 # See sudoers(5) for more information on "@include" directives:
 
 @includedir /etc/sudoers.d
+
+
+check ALL=(ALL) NOPASSWD: /usr/lib/nagios/plugins/check_apt
+check ALL=(ALL) NOPASSWD: /usr/sbin/arp
