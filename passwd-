@@ -25,3 +25,5 @@ systemd-resolve:x:992:992:systemd Resolver:/:/usr/sbin/nologin
 sshd:x:103:65534::/run/sshd:/usr/sbin/nologin
 postfix:x:104:105::/var/spool/postfix:/usr/sbin/nologin
 uuidd:x:105:107::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:106:109::/nonexistent:/usr/sbin/nologin
+check:x:1000:1000::/home/check:/bin/bash

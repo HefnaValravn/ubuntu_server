@@ -34,7 +34,7 @@ sasl:x:45:
 plugdev:x:46:
 staff:x:50:
 games:x:60:
-users:x:100:
+users:x:100:check
 nogroup:x:65534:
 systemd-journal:x:999:
 systemd-network:x:998:
@@ -54,3 +54,4 @@ uuidd:x:107:
 crontab:x:991:
 rdma:x:108:
 tcpdump:x:109:
+check:x:1000:
