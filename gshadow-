@@ -36,7 +36,7 @@ sasl:*::
 plugdev:*::
 staff:*::
 games:*::
-users:*::
+users:*::check
 nogroup:*::
 systemd-timesync:!*::
 input:!*::
