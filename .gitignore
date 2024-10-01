@@ -1,3 +1,7 @@
 /*
 !ssh/
 !dhcp/
+!aliases
+!group
+!passwd
+!hosts
