@@ -8,4 +8,5 @@
 !apt/
 !locale
 yoda/
+!scripts/
 !*.sh
