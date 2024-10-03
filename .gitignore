@@ -10,3 +10,4 @@
 yoda/
 !scripts/
 !*.sh
+!extra_exercises/
