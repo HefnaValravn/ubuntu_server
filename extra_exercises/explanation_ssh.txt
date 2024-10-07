@@ -11,5 +11,6 @@ useradd -m check
 
 And added his public key in the authorized_keys file under /root/.ssh so he could log in with the provided public key.
 While I was there, I also added a newly generated ssh key from my laptop, so I could connect as root without being asked for a password. (valravn@valravn)
+I did so by using the ssh-copy-id from my machine; I entered my server password when prompted, and that finally allows me to log in as root without the need for a password.
 
 I then reloaded the daemon and the ssh and sshd services.
