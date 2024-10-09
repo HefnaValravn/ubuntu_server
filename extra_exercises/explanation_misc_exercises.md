@@ -3,9 +3,6 @@ I'm not sure that the commit message I set for most of my commits so far were de
 
 - LOCALE: I just modified the /etc/default/locale file to suit my needs.
 
-- BACKUP: I created a few scripts: backup.sh, to create a copy under /var/backup/inotify/ of any file it's given; incron_config, which triggers the backup.sh script whenever any file under /etc is modified; and then I set up a script on my own machine to
-          make a backup of all of /etc 5 minutes after I boot up my laptop. Finally, cleanup_yoda.sh removes all files from the yoda/ directory so backup functionality can be validated. I used cron and in
-
 - SUDO: I added the user "check" to the sudoers group with the "sudo usermod -aG sudo check" command. Then I opened the sudoers file (using sudo visudo) and added a few commands to allow the check user to execute a few commands as sudo without password verification. ("check ALL(ALL) NOPASSWD: /usr/lib/nagios/plugins/check_apt", "check ALL=(ALL) NOPASSWD: /usr/sbin/arp")
 
 
