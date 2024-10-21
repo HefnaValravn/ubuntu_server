@@ -10,8 +10,12 @@ Once this is done, I can add a static ARP entry for my default gateway, which pr
 - `sudo arp -s 193.191.176.254 ca:fe:c0:ff:ee:00 -i eth0`
 
 This command works every time you execute it, but to make it persistent, you need to add it 
-to the `/etc/network/if-up.d/` folder in the form of a script. (Also making sure to make the script executable
+to the `/etc/networkd-dispatcher/routable.d/` folder in the form of a script with a condition to wait until the
+eth0 interface is up and running (`while ! ip link show eth0 | grep -q "state UP"; do sleep 1 done`)
+
+(Also making sure to make the script executable
 with `sudo chmod +x (script name)`)
+
 Putting the script in this folder also ensures that the script is executed when the network is restarted,
 the RJ45 plug is reseated, or other scenarios.
 
