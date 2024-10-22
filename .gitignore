@@ -13,3 +13,4 @@ yoda/
 !extra_exercises/
 !cron.d/
 !networkd-dispatcher/
+!ntpsec/
