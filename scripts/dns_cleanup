@@ -1,19 +1,14 @@
 #!/bin/bash
 
-if [ "$(id -u)" -ne 0 ]; then
-  echo "Only root can run this script."
-  exit 1
-fi
-
 # Find zone files older than 4 hours and delete
 find /var/lib/bind/yoda_zone_*.db -type f -mmin +240 | while read -r ZONE_FILE; do
   ZONE_NAME=$(basename "$ZONE_FILE" .db | sed 's/^yoda_zone_//')
   
   # Remove zone configuration in named.conf.yoda-zones
-  sed -i "/zone \"$ZONE_NAME.slimme-rik.sasm.uclllabs.be\"/,+3d" /etc/bind/named.conf.yoda-zones
+  sed -i "/zone \"$ZONE_NAME.nicolas-benedettigonzalez.sasm.uclllabs.be\"/,+3d" /etc/bind/named.conf.yoda-zones
 
   # Remove NS record in primary zone
-  sed -i "/$ZONE_NAME.slimme-rik.sasm.uclllabs.be/d" /var/lib/bind/slimme-rik.sasm.uclllabs.be.db
+  sed -i "/$ZONE_NAME.nicolas-benedettigonzalez.sasm.uclllabs.be/d" /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db
 
   # Delete the zone file
   rm -f "$ZONE_FILE"

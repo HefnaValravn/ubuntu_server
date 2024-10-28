@@ -1,11 +1,6 @@
 #!/bin/bash
 
-if [ "$(id -u)" -ne 0 ]; then
-  echo "Only root can run this script."
-  exit 1
-fi
-
-ZONE="$1.slimme-rik.sasm.uclllabs.be"
+ZONE="$1.nicolas-benedettigonzalez.sasm.uclllabs.be"
 
 if [ -z "$1" ]; then
   echo "Usage: sudo dns_add_zone <subzone>"
@@ -24,18 +19,18 @@ echo "zone \"$ZONE\" {
 # Create zone file
 cat <<EOF > "$ZONE_FILE"
 \$TTL 86400
-@    IN    SOA   ns.slimme-rik.sasm.uclllabs.be. admin.slimme-rik.sasm.uclllabs.be. (
+@    IN    SOA   ns.nicolas-benedettigonzalez.sasm.uclllabs.be. admin.slimme-rik.sasm.uclllabs.be. (
                   $(date +%Y%m%d01) ; Serial
                   3600       ; Refresh
                   1800       ; Retry
                   1209600    ; Expire
                   86400      ; Minimum TTL
 )
-@    IN    NS    ns.slimme-rik.sasm.uclllabs.be.
+@    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be.
 EOF
 
 # Add NS record in the main zone file for delegation
-echo "$1    IN    NS    ns.slimme-rik.sasm.uclllabs.be." >> /var/lib/bind/slimme-rik.sasm.uclllabs.be.db
+echo "$1    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be." >> /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db
 
 # Reload BIND to apply changes
 systemctl reload bind9
