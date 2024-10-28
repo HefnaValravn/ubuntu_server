@@ -1,3 +1,4 @@
+# SERVER PART
 
 First, I need to install bind and all its utilities with `apt install bind9 bind9utils bind9-doc`.
 
@@ -38,4 +39,21 @@ different zones of my server:
 - dig @localhost (www zone)
 
 - dig @localhost (test zone)
-(END OF FIRST PART)
+
+
+# SCRIPTING PART
+
+For the scripting part of the DNS assignment, we first make sure the prerequisites are met:
+
+- Proper permissions for the scripts folder (`chown root:root /etc/scripts` and `chmod 700 /etc/scripts`)
+
+- Making sure the check user can run the scripts as sudo without being prompted for a password by editing the
+sudoers file and adding the following line: `check ALL=(ALL) NOPASSWD: /etc/scripts/dns_add_zone, /etc/scripts/dns_add_record`
+
+- Including the yoda zones config file in the `/etc/bind/named.conf.local` file and adding the appropriate files
+to gitignore to avoid repo pollution:
+	- `include "/etc/bind/named.conf.yoda-zones";`
+	- In .gitignore: `/etc/bind/named.conf.yoda-zones` and `/var/lib/bind/yoda_zone_*`
+
+Once this is done, we can get started with the scripts.
+
