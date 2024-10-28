@@ -14,3 +14,4 @@ yoda/
 !cron.d/
 !networkd-dispatcher/
 !ntpsec/
+!bind/
