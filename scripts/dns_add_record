@@ -1,0 +1,55 @@
+#!/bin/bash
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "Only root can run this script."
+  exit 1
+fi
+
+# Defaults and options
+RECORD_TYPE="A"
+while getopts ":t:" opt; do
+  case ${opt} in
+    t ) RECORD_TYPE="$OPTARG" ;;
+    * ) echo "Usage: sudo dns_add_record -t [A|MX|CNAME] <name> <target> <zone>"; exit 1 ;;
+  esac
+done
+shift $((OPTIND -1))
+
+# Parameters
+NAME="$1"
+TARGET="$2"
+ZONE="$3"
+
+if [ -z "$NAME" ] || [ -z "$TARGET" ] || [ -z "$ZONE" ]; then
+  echo "Usage: sudo dns_add_record -t [A|MX|CNAME] <name> <target> <zone>"
+  exit 1
+fi
+
+ZONE_FILE="/var/lib/bind/yoda_zone_${ZONE%%.*}.db"
+if [ ! -f "$ZONE_FILE" ]; then
+  echo "Zone file for $ZONE not found!"
+  exit 1
+fi
+
+# Add record to zone file
+case $RECORD_TYPE in
+  A)
+    echo "$NAME    IN    A    $TARGET" >> "$ZONE_FILE"
+    ;;
+  CNAME)
+    echo "$NAME    IN    CNAME    $TARGET" >> "$ZONE_FILE"
+    ;;
+  MX)
+    # Add both MX and A records for RFC compliance
+    echo "$NAME    IN    MX    10 $NAME" >> "$ZONE_FILE"
+    echo "$NAME    IN    A    $TARGET" >> "$ZONE_FILE"
+    ;;
+  *)
+    echo "Invalid record type: $RECORD_TYPE"
+    exit 1
+    ;;
+esac
+
+# Reload BIND
+systemctl reload bind9
+echo "$RECORD_TYPE record added to $ZONE."

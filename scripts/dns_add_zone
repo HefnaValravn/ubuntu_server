@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "Only root can run this script."
+  exit 1
+fi
+
+ZONE="$1.slimme-rik.sasm.uclllabs.be"
+
+if [ -z "$1" ]; then
+  echo "Usage: sudo dns_add_zone <subzone>"
+  exit 1
+fi
+
+# Create zone file path
+ZONE_FILE="/var/lib/bind/yoda_zone_$1.db"
+
+# Add the new zone to the configuration
+echo "zone \"$ZONE\" {
+    type master;
+    file \"$ZONE_FILE\";
+};" >> /etc/bind/named.conf.yoda-zones
+
+# Create zone file
+cat <<EOF > "$ZONE_FILE"
+\$TTL 86400
+@    IN    SOA   ns.slimme-rik.sasm.uclllabs.be. admin.slimme-rik.sasm.uclllabs.be. (
+                  $(date +%Y%m%d01) ; Serial
+                  3600       ; Refresh
+                  1800       ; Retry
+                  1209600    ; Expire
+                  86400      ; Minimum TTL
+)
+@    IN    NS    ns.slimme-rik.sasm.uclllabs.be.
+EOF
+
+# Add NS record in the main zone file for delegation
+echo "$1    IN    NS    ns.slimme-rik.sasm.uclllabs.be." >> /var/lib/bind/slimme-rik.sasm.uclllabs.be.db
+
+# Reload BIND to apply changes
+systemctl reload bind9
+echo "Zone $ZONE added successfully."
