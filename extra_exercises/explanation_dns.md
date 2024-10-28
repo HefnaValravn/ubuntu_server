@@ -26,5 +26,12 @@ Afterwards, I ensure the permissions are correct through AppArmor, by editing th
 Then I restart AppArmor just in case.
 
 Finally, I check that my server configuration is okay with the `named-checkconf` and `named-checkzone nicolas-benedettigonzalez.sasm.uclllabs.be /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db` commands.
+I can also check that my configuration is proper with the dig command using the `@localhost` parameter for the
+different zones of my server:
 
+- dig @localhost (ns zone)
+
+- dig @localhost (www zone)
+
+- dig @localhost (test zone)
 (END OF FIRST PART)
