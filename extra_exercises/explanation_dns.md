@@ -59,7 +59,7 @@ Once this is done, we can get started with the scripts.
 
 
 First, I create a script `add_dns_zone` that adds a zone to my server and appends it to the `named.conf.yoda-zones`
-file under `/etc/bind/`
+file under `/etc/bind/`.
 
 Secondly, I create a script `add_dns_record` that adds a record to a given zone in the form of an A, MX or CNAME
 record by adding them to their respective zone files under their respective zone files.
@@ -70,4 +70,5 @@ ensure that the zone list isn't too long and stays consistent. This script only 
 `yoda_zone_`, which ensures that the legitimate zone for my own dns server that I set up earlier stays intact, and
 only zones added by yoda are deleted.
 
-I then give proper permissions to each script and make them executable to ensure evaluation works properly.
+I then give proper permissions to each script and make them executable to ensure evaluation works properly,
+and add the dns_cleanup file to the crontab so it gets executed every hour.
