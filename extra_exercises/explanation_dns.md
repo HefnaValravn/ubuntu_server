@@ -23,6 +23,10 @@ Afterwards, I ensure the permissions are correct through AppArmor, by editing th
 - `/var/cache/bind/ rw`
 
 
+I also access the file under `/etc/bind/named.conf.options` and modify it to allow queries from anyone and to
+listen to all IP addresses, just in case.
+
+
 Then I restart AppArmor just in case.
 
 Finally, I check that my server configuration is okay with the `named-checkconf` and `named-checkzone nicolas-benedettigonzalez.sasm.uclllabs.be /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db` commands.
