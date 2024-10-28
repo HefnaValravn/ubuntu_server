@@ -59,3 +59,4 @@ incron:x:110:
 netdev:x:111:
 polkitd:x:990:
 ntpsec:x:112:
+bind:x:113:
