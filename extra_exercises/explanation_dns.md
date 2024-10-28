@@ -8,7 +8,7 @@ under `/etc/bind/named.conf.local`.
 `ns2.uclllabs.be` to be added as slaves.
 
 
-Then, I create the .db file under the same directory as the .local file, where I can define things like the
+Then, I create the .db file under the `/var/lib/bind` directory, where I can define things like the
 serial, refresh, retry, expire, and minimum TTL (for ipv6) parameters. Additionally, I can also define the slave
 domain names in this file, as well as my own domain name. Finally, in this file I define the ns., www., and
 test. zones for my dns server, and what IP they should return.
@@ -25,5 +25,6 @@ Afterwards, I ensure the permissions are correct through AppArmor, by editing th
 
 Then I restart AppArmor just in case.
 
+Finally, I check that my server configuration is okay with the `named-checkconf` and `named-checkzone nicolas-benedettigonzalez.sasm.uclllabs.be /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db` commands.
 
 (END OF FIRST PART)
