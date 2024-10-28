@@ -20,6 +20,7 @@ options {
 	//========================================================================
 	dnssec-validation auto;
 	listen-on { any; };
+	recursion no;
 	allow-query {any; };
 	listen-on-v6 { any; };
 };
