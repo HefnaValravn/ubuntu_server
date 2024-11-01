@@ -15,5 +15,5 @@ yoda/
 !networkd-dispatcher/
 !ntpsec/
 !bind/
-/etc/bind/named.conf.yoda-zones
+bind/named.conf.yoda-zones
 /var/lib/bind/yoda_zone_*
