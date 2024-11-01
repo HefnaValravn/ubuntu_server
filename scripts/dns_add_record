@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+# Ensure the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Error: This script must be run as root or via sudo."
+  exit 1
+fi
+
 # Defaults and options
 RECORD_TYPE="A"
 while getopts ":t:" opt; do
@@ -46,5 +53,5 @@ case $RECORD_TYPE in
 esac
 
 # Reload BIND
-systemctl reload bind9
+/usr/sbin/rndc reload
 echo "$RECORD_TYPE record added to $ZONE."

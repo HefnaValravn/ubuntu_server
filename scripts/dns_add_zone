@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Ensure the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Error: This script must be run as root or via sudo."
+  exit 1
+fi
+
 ZONE="$1.nicolas-benedettigonzalez.sasm.uclllabs.be"
 
 if [ -z "$1" ]; then
@@ -33,5 +39,5 @@ EOF
 echo "$1    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be." >> /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db
 
 # Reload BIND to apply changes
-systemctl reload bind9
+/usr/sbin/rndc reload
 echo "Zone $ZONE added successfully."
