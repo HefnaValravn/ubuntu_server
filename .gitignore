@@ -14,5 +14,5 @@ yoda/
 !cron.d/
 !networkd-dispatcher/
 !ntpsec/
-!bind/
-/var/lib/bind/yoda_zone_*
+!bind/named.conf.local
+!bind/named.conf.options
