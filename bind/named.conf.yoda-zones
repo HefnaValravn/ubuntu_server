@@ -1,4 +1,0 @@
-zone "asdf.nicolas-benedettigonzalez.sasm.uclllabs.be" {
-    type master;
-    file "/var/lib/bind/yoda_zone_asdf.db";
-};
