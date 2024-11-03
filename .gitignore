@@ -16,3 +16,4 @@ yoda/
 !ntpsec/
 !bind/named.conf.local
 !bind/named.conf.options
+!apache2/*
