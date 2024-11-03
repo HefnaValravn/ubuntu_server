@@ -5,7 +5,7 @@ For this exercise, I will firstly install apache with `apt install apache2`.
 Then, once installed, I can enable it and start it with `systemctl enable apache2` and `systemctl start apache2`.
 
 
-I will then edit and configure the default webpage by editing the `/etc/apache2/sites-available/000-default.conf` file.
+I will then edit and configure the default webpage by editing the `/etc/apache2/sites-available/000-default.conf` file, and making sure that I DO NOT add a `ServerAlias *` line as that would capture all traffic from other webpages as well.
 
 - I create a basic webpage under the root directory I specified previously (for example, `/var/www/html/default/`) and make sure the text "Welcome" is displayed in it.
 
@@ -27,5 +27,6 @@ with `htpasswd -c /etc/apache2/.htpasswd check`.
 
 I ensure that Apache allows .htaccess overrides by changing the configuration in the www1.conf file to include `AllowOverride AuthConfig`. I then reload apache.
 
+Most importantly, I add A type DNS records for all subzones (www1 and www2) in the `/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db` file.
 
 That is the first part of the assignment.
