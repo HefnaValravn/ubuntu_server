@@ -29,4 +29,7 @@ I ensure that Apache allows .htaccess overrides by changing the configuration in
 
 Most importantly, I add A type DNS records for all subzones (www1 and www2) in the `/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db` file.
 
+
+When testing the www2. subzone, I realized I was missing a package, which I could install with `apt install libapache2-mod-php`. This mod for apache allows me to use php.
+
 That is the first part of the assignment.
