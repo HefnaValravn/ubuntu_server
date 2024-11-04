@@ -53,7 +53,8 @@ esac
 
 # Update SOA Serial for the child zone
 # Extract the current serial number (first numeric value after 'SOA')
-current_serial=$(awk '/SOA/ { getline; print $1 }' "$ZONE_FILE")
+current_serial=$(awk '/SOA/ {getline; print $1 }' "$ZONE_FILE")
+
 new_serial=$(date +%Y%m%d00)
 
 # Check if the current serial has today's date; if so, increment it
@@ -65,6 +66,11 @@ fi
 # Replace only the serial number in the correct position
 sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$ZONE_FILE"
 
+
 # Reload BIND
-/usr/sbin/rndc reload
+if ! /usr/sbin/rndc reload; then
+  echo "Failed to reload BIND."
+  exit 1
+fi
+
 echo "$RECORD_TYPE record added to $ZONE."

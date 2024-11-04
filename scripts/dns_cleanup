@@ -20,20 +20,15 @@ file_age_in_hours() {
 
 # Function to update the SOA serial in the parent zone file
 update_soa_serial() {
-  # Extract the current serial number (first numeric value after 'SOA')
   current_serial=$(awk '/SOA/ { getline; print $1 }' "$PARENT_ZONE_FILE")
   new_serial=$(date +%Y%m%d00)
 
-  # Check if the current serial has today's date; if so, increment it
   if [[ "$current_serial" =~ ^[0-9]+$ && "${current_serial:0:8}" == "$(date +%Y%m%d)" ]]; then
     counter=$((10#${current_serial:8} + 1))
     new_serial="$(date +%Y%m%d)$(printf '%02d' $counter)"
   fi
 
-  # Replace only the serial number in the correct position
   sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
-
-
 }
 
 # Find and delete zones older than 4 hours
@@ -42,17 +37,21 @@ for zone_file in "$ZONES_DIR"/yoda_zone_*.db; do
     continue
   fi
 
-  # Extract zone name from file
   zone_name=$(basename "$zone_file" | sed 's/yoda_zone_//;s/\.db//')
   full_zone_name="$zone_name.$PARENT_ZONE"
 
-  # Skip if the zone file is less than 4 hours old
   if [ $(file_age_in_hours "$zone_file") -lt 4 ]; then
     continue
   fi
 
-  # Remove NS record using rndc delzone
   echo "Removing NS record and zone configuration for $full_zone_name"
+  
+  # Remove NS record from the parent zone file
+  if ! sed -i "/$zone_name IN NS ns.$PARENT_ZONE/d" "$PARENT_ZONE_FILE"; then
+    echo "Warning: Failed to remove NS record for $full_zone_name from $PARENT_ZONE_FILE"
+  fi
+
+  # Remove NS record using rndc delzone
   if ! rndc delzone "$full_zone_name"; then
     echo "Warning: Failed to remove NS record for $full_zone_name"
   fi
@@ -76,6 +75,4 @@ done
 
 /usr/sbin/rndc reload
 
-# Final output message
 echo "Cleanup completed: Zones older than 4 hours have been removed, and SOA record updated."
-
