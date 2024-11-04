@@ -42,7 +42,7 @@ case $RECORD_TYPE in
     ;;
   MX)
     # Add both MX and A records for RFC compliance
-    echo "$NAME    IN    MX    10 $NAME.$ZONE." >> "$ZONE_FILE"
+    echo "$NAME    IN    MX    10 $NAME.$ZONE.nicolas-benedettigonzalez.sasm.uclllabs.be." >> "$ZONE_FILE"
     echo "$NAME    IN    A    $TARGET" >> "$ZONE_FILE"
     ;;
   *)

@@ -32,12 +32,12 @@ update_soa_serial() {
 }
 
 # Find and delete zones older than 4 hours
-for zone_file in "$ZONES_DIR"/yoda_zone_*.db; do
+for zone_file in "$ZONES_DIR"/yoda-zone-*.db; do
   if [ ! -f "$zone_file" ]; then
     continue
   fi
 
-  zone_name=$(basename "$zone_file" | sed 's/yoda_zone_//;s/\.db//')
+  zone_name=$(basename "$zone_file" | sed 's/yoda-zone-//;s/\.db//')
   full_zone_name="$zone_name.$PARENT_ZONE"
 
   if [ $(file_age_in_hours "$zone_file") -lt 4 ]; then
