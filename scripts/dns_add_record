@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Ensure the script is run as root
 if [ "$EUID" -ne 0 ]; then
   echo "Error: This script must be run as root or via sudo."
@@ -27,7 +26,7 @@ if [ -z "$NAME" ] || [ -z "$TARGET" ] || [ -z "$ZONE" ]; then
   exit 1
 fi
 
-ZONE_FILE="/var/lib/bind/yoda_zone_${ZONE%%.*}.db"
+ZONE_FILE="/var/lib/bind/${ZONE}.db"
 if [ ! -f "$ZONE_FILE" ]; then
   echo "Zone file for $ZONE not found!"
   exit 1
@@ -43,7 +42,7 @@ case $RECORD_TYPE in
     ;;
   MX)
     # Add both MX and A records for RFC compliance
-    echo "$NAME    IN    MX    10 $NAME" >> "$ZONE_FILE"
+    echo "$NAME    IN    MX    10 $NAME.$ZONE." >> "$ZONE_FILE"
     echo "$NAME    IN    A    $TARGET" >> "$ZONE_FILE"
     ;;
   *)
@@ -51,6 +50,20 @@ case $RECORD_TYPE in
     exit 1
     ;;
 esac
+
+# Update SOA Serial for the child zone
+# Extract the current serial number (first numeric value after 'SOA')
+current_serial=$(awk '/SOA/ { getline; print $1 }' "$ZONE_FILE")
+new_serial=$(date +%Y%m%d00)
+
+# Check if the current serial has today's date; if so, increment it
+if [[ "$current_serial" =~ ^[0-9]+$ && "${current_serial:0:8}" == "$(date +%Y%m%d)" ]]; then
+  counter=$((10#${current_serial:8} + 1))
+  new_serial="$(date +%Y%m%d)$(printf '%02d' $counter)"
+fi
+
+# Replace only the serial number in the correct position
+sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$ZONE_FILE"
 
 # Reload BIND
 /usr/sbin/rndc reload

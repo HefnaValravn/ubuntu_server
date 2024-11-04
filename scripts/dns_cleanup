@@ -1,19 +1,81 @@
 #!/bin/bash
 
-# Find zone files older than 4 hours and delete
-find /var/lib/bind/yoda_zone_*.db -type f -mmin +240 | while read -r ZONE_FILE; do
-  ZONE_NAME=$(basename "$ZONE_FILE" .db | sed 's/^yoda_zone_//')
-  
-  # Remove zone configuration in named.conf.yoda-zones
-  sed -i "/zone \"$ZONE_NAME.nicolas-benedettigonzalez.sasm.uclllabs.be\"/,+3d" /etc/bind/named.conf.yoda-zones
+# Ensure the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Error: This script must be run as root or via sudo."
+  exit 1
+fi
 
-  # Remove NS record in primary zone
-  sed -i "/$ZONE_NAME.nicolas-benedettigonzalez.sasm.uclllabs.be/d" /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db
+# Variables
+ZONES_DIR="/var/lib/bind"  # Directory where zone files are stored
+CONFIG_FILE="/etc/bind/named.conf.yoda-zones"  # Config file defining zones
+PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"  # Path to parent zone file
+PARENT_ZONE="nicolas-benedettigonzalez.sasm.uclllabs.be"  # Update to match your setup
 
-  # Delete the zone file
-  rm -f "$ZONE_FILE"
-  echo "Removed zone: $ZONE_NAME"
+# Function to calculate the age of a file in hours
+file_age_in_hours() {
+  local file="$1"
+  echo $(( ( $(date +%s) - $(stat -c %Y "$file") ) / 3600 ))
+}
+
+# Function to update the SOA serial in the parent zone file
+update_soa_serial() {
+  # Extract the current serial number (first numeric value after 'SOA')
+  current_serial=$(awk '/SOA/ { getline; print $1 }' "$PARENT_ZONE_FILE")
+  new_serial=$(date +%Y%m%d00)
+
+  # Check if the current serial has today's date; if so, increment it
+  if [[ "$current_serial" =~ ^[0-9]+$ && "${current_serial:0:8}" == "$(date +%Y%m%d)" ]]; then
+    counter=$((10#${current_serial:8} + 1))
+    new_serial="$(date +%Y%m%d)$(printf '%02d' $counter)"
+  fi
+
+  # Replace only the serial number in the correct position
+  sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
+
+
+}
+
+# Find and delete zones older than 4 hours
+for zone_file in "$ZONES_DIR"/yoda_zone_*.db; do
+  if [ ! -f "$zone_file" ]; then
+    continue
+  fi
+
+  # Extract zone name from file
+  zone_name=$(basename "$zone_file" | sed 's/yoda_zone_//;s/\.db//')
+  full_zone_name="$zone_name.$PARENT_ZONE"
+
+  # Skip if the zone file is less than 4 hours old
+  if [ $(file_age_in_hours "$zone_file") -lt 4 ]; then
+    continue
+  fi
+
+  # Remove NS record using rndc delzone
+  echo "Removing NS record and zone configuration for $full_zone_name"
+  if ! rndc delzone "$full_zone_name"; then
+    echo "Warning: Failed to remove NS record for $full_zone_name"
+  fi
+
+  # Remove the zone data file
+  echo "Deleting zone file $zone_file"
+  if ! rm -f "$zone_file"; then
+    echo "Warning: Failed to delete zone file $zone_file"
+    continue
+  fi
+
+  # Remove the zone configuration from the named.conf file
+  echo "Removing zone configuration for $zone_name from $CONFIG_FILE"
+  if ! sed -i "/zone \"$full_zone_name\" {/,/};/d" "$CONFIG_FILE"; then
+    echo "Warning: Failed to remove configuration for $full_zone_name from $CONFIG_FILE"
+  fi
+
+  # Update SOA serial after deleting a zone
+  update_soa_serial
 done
 
-# Reload BIND
-systemctl reload bind9
+/usr/sbin/rndc reload
+
+# Final output message
+echo "Cleanup completed: Zones older than 4 hours have been removed, and SOA record updated."
+

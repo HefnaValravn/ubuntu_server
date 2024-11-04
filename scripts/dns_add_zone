@@ -6,23 +6,25 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-ZONE="$1.nicolas-benedettigonzalez.sasm.uclllabs.be"
-
+# Check if a subzone argument is provided
 if [ -z "$1" ]; then
   echo "Usage: sudo dns_add_zone <subzone>"
   exit 1
 fi
 
-# Create zone file path
-ZONE_FILE="/var/lib/bind/yoda_zone_$1.db"
+SUBZONE="$1"
+ZONE="$SUBZONE.nicolas-benedettigonzalez.sasm.uclllabs.be"
+ZONE_FILE="/var/lib/bind/yoda_zone_$SUBZONE.db"
+PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"
+CONFIG_FILE="/etc/bind/named.conf.yoda-zones"
 
-# Add the new zone to the configuration
+# Add the new zone to the configuration file
 echo "zone \"$ZONE\" {
     type master;
     file \"$ZONE_FILE\";
-};" >> /etc/bind/named.conf.yoda-zones
+};" >> "$CONFIG_FILE"
 
-# Create zone file
+# Create the zone file with SOA record
 cat <<EOF > "$ZONE_FILE"
 \$TTL 86400
 @    IN    SOA   ns.nicolas-benedettigonzalez.sasm.uclllabs.be. admin.slimme-rik.sasm.uclllabs.be. (
@@ -35,9 +37,24 @@ cat <<EOF > "$ZONE_FILE"
 @    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be.
 EOF
 
-# Add NS record in the main zone file for delegation
-echo "$1    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be." >> /var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db
+# Add NS record in the main parent zone file for delegation
+echo "$SUBZONE    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be." >> "$PARENT_ZONE_FILE"
+
+# Update SOA serial in the parent zone file
+# Extract the current serial number (first numeric value after 'SOA')
+current_serial=$(awk '/SOA/ { getline; print $1 }' "$PARENT_ZONE_FILE")
+new_serial=$(date +%Y%m%d00)
+
+# Check if the current serial has today's date; if so, increment it
+if [[ "$current_serial" =~ ^[0-9]+$ && "${current_serial:0:8}" == "$(date +%Y%m%d)" ]]; then
+  counter=$((10#${current_serial:8} + 1))
+  new_serial="$(date +%Y%m%d)$(printf '%02d' $counter)"
+fi
+
+# Replace only the serial number in the correct position
+sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
+
 
 # Reload BIND to apply changes
 /usr/sbin/rndc reload
-echo "Zone $ZONE added successfully."
+echo "Zone $ZONE added successfully with updated SOA serial."
