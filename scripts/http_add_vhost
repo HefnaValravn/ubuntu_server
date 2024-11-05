@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Check if the script is being run as root
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Error: This script must be run as root."
+    exit 1
+fi
+
+# Check for the correct number of arguments
+if [[ $# -ne 1 ]]; then
+    echo "Usage: check \$sudo http_add_vhost <FQDN>"
+    exit 1
+fi
+
+# Variables
+DOMAIN=$1
+DOC_ROOT="/var/www/html/${DOMAIN%%.*}"
+CONFIG_FILE="/etc/apache2/sites-available/${DOMAIN%%.*}.conf"
+PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"
+
+# Validate the domain name
+if ! [[ "$DOMAIN" =~ ^[a-z0-9.-]+\.sasm\.uclllabs\.be$ ]]; then
+    echo "Error: Invalid domain."
+    exit 1
+fi
+
+# Create the document root directory
+mkdir -p "$DOC_ROOT"
+
+# Create a valid HTML file
+cat <<EOF > "$DOC_ROOT/index.html"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$DOMAIN</title>
+</head>
+<body>
+    <h1>$DOMAIN</h1>
+</body>
+</html>
+EOF
+
+# Create the virtual host configuration file
+cat <<EOF > "$CONFIG_FILE"
+<VirtualHost *:80>
+    ServerName $DOMAIN
+    DocumentRoot $DOC_ROOT
+
+    <Directory $DOC_ROOT>
+        Options -Indexes
+        AllowOverride None
+	Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/${DOMAIN%%.*}_error.log
+    CustomLog ${APACHE_LOG_DIR}/${DOMAIN%%.*}_access.log combined
+</VirtualHost>
+EOF
+
+#add A record to parent zone and stuff
+echo "$DOMAIN.     IN    A    193.191.176.194" >> "$PARENT_ZONE_FILE"
+
+# Update SOA serial in the parent zone file
+# Extract the current serial number (first numeric value after 'SOA')
+current_serial=$(awk '/SOA/ { getline; print $1 }' "$PARENT_ZONE_FILE")
+new_serial=$(date +%Y%m%d00)
+
+# Check if the current serial has today's date; if so, increment it
+if [[ "$current_serial" =~ ^[0-9]+$ && "${current_serial:0:8}" == "$(date +%Y%m%d)" ]]; then
+  counter=$((10#${current_serial:8} + 1))
+  new_serial="$(date +%Y%m%d)$(printf '%02d' $counter)"
+fi
+
+# Replace only the serial number in the correct position
+sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
+
+# Enable the virtual host
+a2ensite "${DOMAIN%%.*}.conf"
+systemctl reload apache2
+rndc reload
+echo "Virtual host $DOMAIN added successfully."

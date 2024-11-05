@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Check if the script is being run as root
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Error: This script must be run as root."
+    exit 1
+fi
+
+# Define directories and patterns
+APACHE_SITES_ENABLED="/etc/apache2/sites-enabled/"
+APACHE_SITES_AVAILABLE="/etc/apache2/sites-available/"
+DOC_ROOT="/var/www/html/"
+PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"
+
+# Find and process obsolete vhosts
+find "$APACHE_SITES_ENABLED" -type l -mtime +0 -print | while read -r link; do
+    # Get the corresponding configuration file
+    config_file=$(readlink -f "$link")
+    
+    # Check if the config file was modified more than 4 hours ago
+    if [[ $(find "$config_file" -mmin +240) ]]; then
+        # Extract the vhost name from the config file name
+        vhost_name=$(basename "$config_file" .conf)
+        
+        # Determine the document root path
+        doc_root_dir="${DOC_ROOT}${vhost_name}/"
+        
+        # Remove the configuration from sites-enabled and sites-available
+        echo "Removing virtual host: $vhost_name"
+        a2dissite "$vhost_name.conf"
+        rm "$config_file"
+        
+        # Remove the document root directory
+        if [[ -d "$doc_root_dir" ]]; then
+            echo "Removing document root directory: $doc_root_dir"
+            rm -rf "$doc_root_dir"
+        fi
+        
+        # Remove the A record from the parent zone file
+        echo "Removing A record for: $vhost_name"
+        sed -i "/^$vhost_name\. *IN *A/d" "$PARENT_ZONE_FILE"
+        
+        # Update the SOA serial
+        current_serial=$(awk '/SOA/ { getline; print $1 }' "$PARENT_ZONE_FILE")
+        new_serial=$(date +%Y%m%d00)
+
+        if [[ "$current_serial" =~ ^[0-9]+$ && "${current_serial:0:8}" == "$(date +%Y%m%d)" ]]; then
+            counter=$((10#${current_serial:8} + 1))
+            new_serial="$(date +%Y%m%d)$(printf '%02d' $counter)"
+        fi
+
+        # Replace only the serial number in the correct position
+        sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
+
+        # Reload Apache and DNS
+        systemctl reload apache2
+        rndc reload
+        
+        echo "Successfully cleaned up $vhost_name."
+    fi
+done
+
+echo "Cleanup complete."

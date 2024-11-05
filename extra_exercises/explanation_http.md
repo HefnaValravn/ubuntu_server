@@ -33,3 +33,12 @@ Most importantly, I add A type DNS records for all subzones (www1 and www2) in t
 When testing the www2. subzone, I realized I was missing a package, which I could install with `apt install libapache2-mod-php`. This mod for apache allows me to use php.
 
 That is the first part of the assignment.
+
+
+# SCRIPTING PART
+
+For the scripting part of this assignment, I first create a script `http_add_vhost` that creates the DocumentRoot directory for the vhost, configures vhost specific logging, and creates a default html page with the name of the vhost in it.
+It also refuses to create a vhost for a non-existing domain. This script is also found under `/etc/scripts`.
+
+I then create a cleanup script, `http_cleanup`, that removes any vhosts that are older than 4 hours from my machine.
+It also removes the A record from the parent zone file (nicolas-benedettigonzalez.sasm.uclllabs.be).

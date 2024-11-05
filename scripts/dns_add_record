@@ -20,13 +20,34 @@ shift $((OPTIND -1))
 NAME="$1"
 TARGET="$2"
 ZONE="$3"
+PARENT_ZONE="nicolas-benedettigonzalez.sasm.uclllabs.be"
 
-if [ -z "$NAME" ] || [ -z "$TARGET" ] || [ -z "$ZONE" ]; then
-  echo "Usage: sudo dns_add_record -t [A|MX|CNAME] <name> <target> <zone>"
-  exit 1
+# Validate parameters based on the record type
+if [ "$RECORD_TYPE" = "CNAME" ]; then
+  ZONE="$2"
+  if [[ "$ZONE" == *.*.$PARENT_ZONE ]]; then
+    ACTUALZONE=$(echo "$ZONE" | awk -F. '{print $2}')
+  else
+    ACTUALZONE="$PARENT_ZONE"
+  fi
+
+  if [ -z "$NAME" ] || [ -z "$ZONE" ]; then
+    echo "Usage for CNAME: sudo dns_add_record -t CNAME <name> <zone>"
+    exit 1
+  fi
+else
+  if [ -z "$NAME" ] || [ -z "$TARGET" ] || [ -z "$ZONE" ]; then
+    echo "Usage: sudo dns_add_record -t [A|MX|CNAME] <name> <target> <zone>"
+    exit 1
+  fi
 fi
 
+
+
 ZONE_FILE="/var/lib/bind/${ZONE}.db"
+if [ "$RECORD_TYPE" = "CNAME" ]; then
+  ZONE_FILE="/var/lib/bind/${ACTUALZONE}.db"
+fi
 if [ ! -f "$ZONE_FILE" ]; then
   echo "Zone file for $ZONE not found!"
   exit 1
@@ -38,7 +59,7 @@ case $RECORD_TYPE in
     echo "$NAME    IN    A    $TARGET" >> "$ZONE_FILE"
     ;;
   CNAME)
-    echo "$NAME    IN    CNAME    $TARGET" >> "$ZONE_FILE"
+    echo "$NAME    IN    CNAME    $ZONE". >> "$ZONE_FILE"
     ;;
   MX)
     # Add both MX and A records for RFC compliance
@@ -73,4 +94,4 @@ if ! /usr/sbin/rndc reload; then
   exit 1
 fi
 
-echo "$RECORD_TYPE record added to $ZONE."
+echo "$RECORD_TYPE record added to zone file."

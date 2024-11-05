@@ -47,7 +47,7 @@ for zone_file in "$ZONES_DIR"/yoda-zone-*.db; do
   echo "Removing NS record and zone configuration for $full_zone_name"
   
   # Remove NS record from the parent zone file
-  if ! sed -i "/$zone_name IN NS ns.$PARENT_ZONE/d" "$PARENT_ZONE_FILE"; then
+  if ! sed -i "/$zone_name\s\+IN\s\+NS\s\+ns\.$PARENT_ZONE\.$/d" "$PARENT_ZONE_FILE"; then
     echo "Warning: Failed to remove NS record for $full_zone_name from $PARENT_ZONE_FILE"
   fi
 

@@ -65,3 +65,4 @@ check ALL=(ALL) NOPASSWD: /usr/sbin/ip link set dev eth0 down
 
 check ALL=(ALL) NOPASSWD: /etc/scripts/dns_add_zone
 check ALL=(ALL) NOPASSWD: /etc/scripts/dns_add_record
+check ALL=(ALL) NOPASSWD: /etc/scripts/http_add_vhost
