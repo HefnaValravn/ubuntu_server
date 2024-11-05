@@ -45,6 +45,7 @@ fi
 
 
 ZONE_FILE="/var/lib/bind/${ZONE}.db"
+echo $ZONE_FILE
 if [ "$RECORD_TYPE" = "CNAME" ]; then
   ZONE_FILE="/var/lib/bind/${ACTUALZONE}.db"
 fi

@@ -14,7 +14,7 @@ fi
 
 SUBZONE="$1"
 ZONE="$SUBZONE.nicolas-benedettigonzalez.sasm.uclllabs.be"
-ZONE_FILE="/var/lib/bind/yoda-zone-$SUBZONE.db"
+ZONE_FILE="/var/lib/bind/$SUBZONE.nicolas-benedettigonzalez.sasm.uclllabs.be.db"
 PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"
 CONFIG_FILE="/etc/bind/named.conf.yoda-zones"
 
