@@ -30,3 +30,4 @@ check:$y$j9T$hQ4Vb8OV9cSDWRelonkGU/$GZ6JheLNIJN9lqaAs9Ny88SaepLjXC4GKy3AEsFox22:
 dnsmasq:!:20017::::::
 polkitd:!*:20017::::::
 ntpsec:!:20018::::::
+bind:!:20024::::::

@@ -20,3 +20,4 @@ yoda/
 !apache2/www1.conf
 !apache2/www2.conf
 apache2/
+!mysql/
