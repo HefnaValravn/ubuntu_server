@@ -9,10 +9,11 @@ use certbot with Apache.
 Then, I will install acme by using `curl https://get.acme.sh | sh` and `source ~/.bashrc`. I will also set the
 default CA to be Let's Encrypt Production.
 
-I will then configure dns_nsupdate with the right variables, like the nsupdate server, zone and key.
+I will then configure dns_nsupdate with the right variables, like the nsupdate server, zone and key. I will add
+these variables to my .bashrc file and source it.
 
 
-Next, I will generate the certificates for my domains: my normal address, my secure address, and my supersecure
+Next, after generating a tsig keypair, I will generate the certificates for my domains: my normal address, my secure address, and my supersecure
 address.
 I will then install said certificates. All of this is done through the acme.sh command.
 
