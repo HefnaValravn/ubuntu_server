@@ -11,7 +11,7 @@ Then, I edit the `virtual_mailbox` file under the same directory to create the "
 my mail server. I then generate the database with `postmap /etc/postfix/virtual_mailbox`.
 
 I create a folder for each virtual user under /var/vmail/{username}, one folder for each user. I give the folder tree
-the right permissions with `chown`.
+the right permissions with `chown` and assigning the vmail folder to GID 5000.
 
 
 Then, I set up Dovecot for LMTP and the virtual users I've created.
