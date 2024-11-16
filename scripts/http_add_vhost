@@ -37,7 +37,7 @@ cat <<EOF > "$DOC_ROOT/index.html"
     <title>welcome $DOMAIN</title>
 </head>
 <body>
-    <h1>$DOMAIN</h1>
+    <h1>welcome $DOMAIN</h1>
 </body>
 </html>
 EOF
