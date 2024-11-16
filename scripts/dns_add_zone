@@ -35,6 +35,7 @@ cat <<EOF > "$ZONE_FILE"
                   86400      ; Minimum TTL
 )
 @    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be.
+@    IN    A     193.191.176.194
 EOF
 
 # Add NS record in the main parent zone file for delegation
