@@ -138,3 +138,7 @@ uucp      unix  -       n       n       -       -       pipe
 #  flags=R user=scalemail argv=/usr/lib/scalemail/bin/scalemail-store ${nexthop} ${user} ${extension}
 #mailman   unix  -       n       n       -       -       pipe
 #  flags=FRX user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py ${nexthop} ${user}
+submission inet n - n - - smtpd
+  -o smtpd_tls_security_level=may
+  -o smtpd_tls_auth_only=yes
+  -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject
