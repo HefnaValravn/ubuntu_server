@@ -15,10 +15,13 @@ the right permissions with `chown` and assigning the vmail folder to GID 5000.
 
 
 Then, I set up Dovecot for LMTP and the virtual users I've created.
-First, I edit the dovecot.conf file under "/etc/dovecot", and specify things like the mail directory.
+First, I edit the dovecot.conf file under "/etc/dovecot", and specify things like the protocols used (imap and lmtp), the mail uid and gid,
+and the passdb and userdb drivers and args. For passdb, I make sure to specify the /etc/dovecot/users file. For userdb,
+I make sure to specify a static driver, but for passdb, I use passwd-file (using the /etc/dovecot/users file).
 I then modify the password configuration file to use the right hashing algorithm (like SHA512-CRYPT) and then make
 a "users" file where I specify each user in the SMTP server with their respective password, which I previously
-generate with `doveadm pw`.
+generate with `doveadm pw -s SHA512-CRYPT`. I have to modify a few settings in the conf.d folder under dovecot to specify
+the encryption algorithm and user verification.
 
 I then make sure there exists an MX (and therefore also an A) record in my DNS zone for my server.
 
