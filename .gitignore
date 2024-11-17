@@ -22,3 +22,4 @@ yoda/
 apache2/
 !mysql/
 !dovecot/
+!Muttrc
