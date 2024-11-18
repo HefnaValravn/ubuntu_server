@@ -26,9 +26,11 @@ I will then install said certificates by specifying the certificates that I just
 # VHOST CONFIG
 
 As a next step, I need to configure the vhosts for my secure and supersecure addresses. I make sure to enable
-automatic redirection to https, and to specify the header configuration on the supersecure vhost.
+automatic redirection to https, and to specify the header configuration on the supersecure vhost. I also specify the fullchain
+and key files that I generated earlier with acme in the .conf file under /etc/apache2/sites-available. I reload apache just
+in case.
 
-I then enable the pages with `a2enmod` and `a2ensite` before reloading apache.
+I then enable the pages with `a2enmod ssl headers rewrite` and `a2ensite` before reloading apache.
 
 
 

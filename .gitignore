@@ -16,10 +16,13 @@ yoda/
 !ntpsec/
 !bind/named.conf.local
 !bind/named.conf.options
+
 !apache2/sites-available/000-default.conf
-!apache2/www1.conf
-!apache2/www2.conf
-apache2/
+!apache2/sites-available/www1.conf
+!apache2/sites-available/www2.conf
+!apache2/sites-available/secure.conf
+!apache2/sites-available/supersecure.conf
+
 !mysql/
 !dovecot/
 !Muttrc
