@@ -7,17 +7,17 @@
 //include "/etc/bind/zones.rfc1918";
 include "/etc/bind/named.conf.yoda-zones";
 
-key "nicolas-benedettigonzalez.sasm.uclllabs.be" {
-  algorithm HMAC-SHA256;
-  secret "FRyvOQklVrf+f5L5rUEFtsyYDQ0M5J81QfsUvCrK+O8=";
+key "acme" {
+  algorithm hmac-sha256;
+  secret "F4vcTfcAs2gbyH5PuEyLa0OAMnARmJV3O7r34qTy3fZEb0CW6RvSAubkSh/2OSxJF/LIVMJK11wwKQh86Af5Rg==";
 };
 
 zone "nicolas-benedettigonzalez.sasm.uclllabs.be" {
     type master;
     file "/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db";
     allow-transfer { 193.191.176.254; 193.191.177.4; };
-    allow-update { key "nicolas-benedettigonzalez.sasm.uclllabs.be";};
+    allow-update { key "acme";};
 //    update-policy {
-//	grant "nicolas-benedettigonzalez.sasm.uclllabs.be" zonesub _acme-challenge.nicolas-benedettigonzalez.sasm.uclllabs.be. TXT;
+//	grant "acme" zonesub _acme-challenge.nicolas-benedettigonzalez.sasm.uclllabs.be. TXT;
 //    };
 };

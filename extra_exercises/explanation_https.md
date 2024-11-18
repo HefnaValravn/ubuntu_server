@@ -13,9 +13,12 @@ I will then configure dns_nsupdate with the right variables, like the nsupdate s
 these variables to my .bashrc file and source it.
 
 
-Next, after generating a tsig keypair, I will generate the certificates for my domains: my normal address, my secure address, and my supersecure
-address.
-I will then install said certificates. All of this is done through the acme.sh command.
+Next, after generating a tsig keypair and configuring it properly in the "named.conf.local" file under "/etc/bind", I will add a dummy 
+TXT record for each zone I need (my main zone, secure. and supersecure.) in my main zone file and then generate the certificates for 
+my domains: my normal address, my secure address, and my supersecure address by using acme.sh. This command will give me a "challenge", 
+or a value for the TXT record that is in my zone file.
+Once I add it and rerun the command, this will generate the certificates under /root/.acme.sh.
+I will then install said certificates by specifying the certificates that I just generated. All of this is done through the acme.sh command.
 
 
 
