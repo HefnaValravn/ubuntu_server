@@ -14,8 +14,9 @@ fi
 
 # Variables
 DOMAIN=$1
-DOC_ROOT="/var/www/html/${DOMAIN%%.*}"
-CONFIG_FILE="/etc/apache2/sites-available/${DOMAIN%%.*}.conf"
+CLEANSED_DOMAIN=echo "$DOMAIN" | sed 's/\(.*\).nicolas.*/\1/'
+DOC_ROOT="/var/www/html/$CLEANSED_DOMAIN"
+CONFIG_FILE="/etc/apache2/sites-available/$CLEANSED_DOMAIN.conf"
 PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"
 
 # Validate the domain name
@@ -38,7 +39,7 @@ cat <<EOF > "$DOC_ROOT/index.html"
 </head>
 <body>
     <h1>welcome $DOMAIN</h1>
-    <h1>welcome ${DOMAIN%%.*}</h1>
+    <h1>welcome $CLEANSED_DOMAIN</h1>
 </body>
 </html>
 EOF
@@ -55,8 +56,8 @@ cat <<EOF > "$CONFIG_FILE"
 	Require all granted
     </Directory>
 
-    ErrorLog ${APACHE_LOG_DIR}/${DOMAIN%%.*}_error.log
-    CustomLog ${APACHE_LOG_DIR}/${DOMAIN%%.*}_access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/${CLEANSED_DOMAIN}_error.log
+    CustomLog ${APACHE_LOG_DIR}/${CLEANSED_DOMAIN}_access.log combined
 </VirtualHost>
 EOF
 
@@ -78,7 +79,7 @@ fi
 sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
 
 # Enable the virtual host
-a2ensite "${DOMAIN%%.*}.conf"
+a2ensite "${CLEANSED_DOMAIN}.conf"
 systemctl reload apache2
 rndc reload
 echo "Virtual host $DOMAIN added successfully."
