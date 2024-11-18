@@ -38,6 +38,7 @@ cat <<EOF > "$DOC_ROOT/index.html"
 </head>
 <body>
     <h1>welcome $DOMAIN</h1>
+    <h1>welcome ${DOMAIN%%.*}</h1>
 </body>
 </html>
 EOF
