@@ -2,7 +2,7 @@
 
 # PREREQUISITES
 
-For this exercise, I first need to install cerbot via apt, as well as the `python3-certbot-apache` plugin so I can
+For this exercise, I first need to install certbot via apt, as well as the `python3-certbot-apache` plugin so I can
 use certbot with Apache.
 
 
