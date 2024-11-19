@@ -53,7 +53,7 @@ sudoers file and adding the following line: `check ALL=(ALL) NOPASSWD: /etc/scri
 - Including the yoda zones config file in the `/etc/bind/named.conf.local` file and adding the appropriate files
 to gitignore to avoid repo pollution:
 	- `include "/etc/bind/named.conf.yoda-zones";`
-	- In .gitignore: `/etc/bind/named.conf.yoda-zones` and `/var/lib/bind/yoda_zone_*`
+	- In .gitignore: `/etc/bind/named.conf.yoda-zones`
 
 Once this is done, we can get started with the scripts.
 
@@ -67,7 +67,7 @@ record by adding them to their respective zone files under their respective zone
 
 Lastly, I create a script `dns_cleanup` that eliminates any zones created by yoda that are older than 4 hours, to
 ensure that the zone list isn't too long and stays consistent. This script only looks for zones that start with
-`yoda_zone_`, which ensures that the legitimate zone for my own dns server that I set up earlier stays intact, and
+`subzone`, which ensures that the legitimate zone for my own dns server that I set up earlier stays intact, and
 only zones added by yoda are deleted.
 
 I then give proper permissions to each script and make them executable to ensure evaluation works properly,
