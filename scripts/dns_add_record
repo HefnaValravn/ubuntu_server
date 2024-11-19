@@ -25,13 +25,9 @@ PARENT_ZONE="nicolas-benedettigonzalez.sasm.uclllabs.be"
 # Validate parameters based on the record type
 if [ "$RECORD_TYPE" = "CNAME" ]; then
   ZONE="$2"
-  if [[ "$ZONE" == *."$PARENT_ZONE" ]]; then
-    ACTUALZONE=${ZONE%.$PARENT_ZONE}
-    if [[ "$ACTUALZONE" == *.* ]]; then
-	echo "This is a subzone: $ACTUALZONE"
-    else
-	ACTUALZONE="$PARENT_ZONE"
-else
+  if [[ "$ZONE" == *.*.$PARENT_ZONE ]]; then
+    ACTUALZONE=$(echo "$ZONE" | awk -F. '{print $2}')
+  else
     ACTUALZONE="$PARENT_ZONE"
   fi
 

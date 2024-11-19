@@ -14,7 +14,7 @@ fi
 
 SUBZONE="$1"
 ZONE="$SUBZONE.nicolas-benedettigonzalez.sasm.uclllabs.be"
-ZONE_FILE="/var/lib/bind/$SUBZONE.db"
+ZONE_FILE="/var/lib/bind/$SUBZONE.nicolas-benedettigonzalez.sasm.uclllabs.be.db"
 PARENT_ZONE_FILE="/var/lib/bind/nicolas-benedettigonzalez.sasm.uclllabs.be.db"
 CONFIG_FILE="/etc/bind/named.conf.yoda-zones"
 
@@ -26,16 +26,15 @@ echo "zone \"$ZONE\" {
 
 # Create the zone file with SOA record
 cat <<EOF > "$ZONE_FILE"
-\$TTL 86400
+\$TTL 60
 @    IN    SOA   ns.nicolas-benedettigonzalez.sasm.uclllabs.be. admin.slimme-rik.sasm.uclllabs.be. (
                   $(date +%Y%m%d01) ; Serial
-                  3600       ; Refresh
-                  1800       ; Retry
-                  1209600    ; Expire
-                  86400      ; Minimum TTL
+                  60       ; Refresh
+                  60       ; Retry
+                  60       ; Expire
+                  60       ; Minimum TTL
 )
 @    IN    NS    ns.nicolas-benedettigonzalez.sasm.uclllabs.be.
-@    IN    A     193.191.176.194
 EOF
 
 # Add NS record in the main parent zone file for delegation
@@ -57,5 +56,5 @@ sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
 
 
 # Reload BIND to apply changes
-/usr/sbin/rndc reload
+systemctl restart bind9
 echo "Zone $ZONE added successfully with updated SOA serial."
