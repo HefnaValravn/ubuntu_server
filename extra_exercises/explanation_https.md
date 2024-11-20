@@ -7,10 +7,10 @@ use certbot with Apache.
 
 
 Then, I will install acme by using `curl https://get.acme.sh | sh` and `source ~/.bashrc`. I will also set the
-default CA to be Let's Encrypt Production.
+default CA to be Let's Encrypt by using `acme.sh --set-default-ca --server letsencrypt`.
 
 I will then configure dns_nsupdate with the right variables, like the nsupdate server, zone and key. I will add
-these variables to my .bashrc file and source it.
+these variables to my .bashrc file and source it, or alternatively, export them temporarily with the `export` command.
 
 
 Next, after generating a tsig keypair and configuring it properly in the "named.conf.local" file under "/etc/bind", I will add a dummy 
