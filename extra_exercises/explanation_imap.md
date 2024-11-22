@@ -9,7 +9,8 @@ Then, I'll make sure to have the following requisites in the "/etc/dovecot/conf.
 - The protocols line should include imap
 - SSL should be required
 - I should specify my ssl certificate and key files
-
+When specifying the SSL certificate and key, it's very important to put a "<" before the file
+location to indicate that the key and certificate are within the file, not the file itself.
 
 I will also edit the "10-mail.conf" file to specify the location of my virtual users' mail.
 
