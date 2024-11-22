@@ -63,3 +63,6 @@ bind:x:113:
 mysql:x:114:
 dovecot:x:115:
 dovenull:x:116:
+vmail:x:5000:
+stunnel4:x:989:stunnel4
+stunnel:x:1001:

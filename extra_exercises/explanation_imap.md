@@ -28,5 +28,27 @@ and SSL configuration.
 
 Then I restart dovecot.
 
-(I can also temporarily enable password mismatching logging by adding the line `auth_verbose = yes` to the 
-"10-logging.conf" file.
+
+# INVESTIGATION PART
+
+For the next part, I need to find out what user1's password is.
+To accomplish this, I first install wireshark + tshark and stunnel4, and configure stunnel with the 
+right input port (993) and output port (143). This means that stunnel will take traffic from 993 
+and forward it to port 143. 
+
+I then configure dovecot so it doesn't run on port 993 anymore (stunnel
+will be using that port instead) and it accepts plaintext connections over port 143 instead; 
+this basically means that I put an intermediary between yoda and dovecot (stunnel) so I can
+temporarily receive unencrypted traffic to extract the password.
+
+Once this is done, I can run the command `sudo tshark -i lo -f "port 143"`, which will capture
+all incoming traffic on port 143. 
+
+From there, whenever yoda tries to access my server, I can see
+what password it's trying to access it with; once I find out what that password is, I can
+generate a hash of it with `doveadm pw -s SHA256-CRYPT` and put it in the "users" file under
+"/etc/dovecot". 
+
+I can also optionally check that the password I just configured works by running
+`doveadm auth test user1@nicolas-benedettigonzalez.sasm.uclllabs.be` and entering the password
+I extracted from tshark.

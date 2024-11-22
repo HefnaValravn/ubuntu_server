@@ -34,7 +34,7 @@ sasl:x:45:
 plugdev:x:46:
 staff:x:50:
 games:x:60:
-users:x:100:check
+users:x:100:check,stunnel
 nogroup:x:65534:
 systemd-journal:x:999:
 systemd-network:x:998:
@@ -64,3 +64,5 @@ mysql:x:114:
 dovecot:x:115:
 dovenull:x:116:
 vmail:x:5000:
+stunnel4:x:989:stunnel4
+stunnel:x:1001:
