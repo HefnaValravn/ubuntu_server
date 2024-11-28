@@ -16,6 +16,7 @@ yoda/
 !ntpsec/
 !bind/named.conf.local
 !bind/named.conf.options
+!iptables/
 
 !apache2/sites-available/000-default.conf
 !apache2/sites-available/www1.conf
