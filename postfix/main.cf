@@ -6,7 +6,7 @@ mydomain = nicolas-benedettigonzalez.sasm.uclllabs.be
 myorigin = $mydomain
 mydestination = $myhostname, localhost.$mydomain, localhost
 inet_interfaces = all
-inet_protocols = ipv4
+inet_protocols = all
 
 
 #this part makes sure that my SMTP server isn't an open relay
