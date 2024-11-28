@@ -81,5 +81,5 @@ sed -i "/SOA/ {n; s/$current_serial/$new_serial/}" "$PARENT_ZONE_FILE"
 # Enable the virtual host
 a2ensite "${CLEANSED_DOMAIN}.conf"
 systemctl reload apache2
-rndc reload
+systemctl restart bind9
 echo "Virtual host $DOMAIN added successfully."

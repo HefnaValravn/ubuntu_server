@@ -1,7 +1,11 @@
 For this exericse, I first of all need to find out what the last quartet of my ipv4 address is. In my case, this number
 is 194, which in hex is c2. Therefore, I will add my ipv6 address with the last part being c2.
-I do this by running the command `sudo ifconfig eth0 add 2001:6a8:2880:a020::c2/64`. I then configure the default
+I do this by running the command `sudo ip -6 addr add 2001:6a8:2880:a020::c2/64 dev eth0`. I then configure the default
 gateway with the command `sudo ip -6 route add default via 2001:6a8:2880:a020::fe`.
+
+This, however, is only a temporary fix; to make it persistent, I need to edit the
+"/etc/systemd/network/eth0.network" file and add my ipv6 address, as well as the "hosts" file under
+/etc.
 
 I then restart bind with `systemctl restart bind9`.
 
@@ -23,9 +27,9 @@ I can also check that I have an IPv6 address assigned by using `ip -6 addr show`
 
 Once this is done, I can safely add AAAA records to my zone file under "/var/lib/bind".
 
-- One for my address: `nicolas-benedettigonzalez.sasm.uclllabs.be IN AAAA (my ipv6 address)`
+- One for my address: `nicolas-benedettigonzalez.sasm.uclllabs.be. IN AAAA (my ipv6 address)`
 
-- One for my ns zone: `nicolas-benedettigonzalez.sasm.uclllabs.be IN AAAA (my ipv6 address)`
+- One for my ns zone: `ns.nicolas-benedettigonzalez.sasm.uclllabs.be. IN AAAA (my ipv6 address)`
 
 
 I then restart bind.
@@ -37,3 +41,11 @@ for IPv6 and logs it to a text file under /var/tmp. This script runs indefinitel
 last been used.
 I then create a service for this script, so I can make it persistent even across reboots. I reload the daemon, enable
 the service I just made, and start it.
+
+
+Finally, if I want to preserve my configuration given that we're using proxmox, I should create the
+following files so the files they're referring to don't get changed:
+
+- `touch /etc/.pve-ignore.hosts`
+- `touch /etc/network/.pve-ignore.interfaces`
+- `touch /etc/systemd/network/.pve-ignore.eth0.network`
