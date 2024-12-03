@@ -35,12 +35,21 @@ Once this is done, I can safely add AAAA records to my zone file under "/var/lib
 I then restart bind.
 
 
-Finally, I need to configure a service that will display the last port to listen on for IPv6 when connecting from
-my server's IPv6 address. To do this, I first configure a script under /etc/scripts that logs which port was last used
-for IPv6 and logs it to a text file under /var/tmp. This script runs indefinitely and listens on which ports IPv6 has
-last been used.
-I then create a service for this script, so I can make it persistent even across reboots. I reload the daemon, enable
-the service I just made, and start it.
+For the next part, I need to actually access the assignment page so I can get the extra instructions. To do this,
+I create a ssh tunnel on my local machine that forwards incoming traffic on 127.0.0.1 to my server:
+
+- `ssh -vvv -D 127.0.0.1:1080 -C -N root@193.191.176.194`
+(the -vvv part doesn't actually matter, as it just enables logging)
+
+Then I can go to my browser settings and configure a socks proxy where the address is 127.0.0.1, port 1080,
+and I use socksv5. This makes it so that all traffic coming into my device gets redirected through this ssh
+tunnel into my server, which has the right IPv6 address to view the page.
+
+Once that's done, I'll be able to see the assignment page, which tells me to configure an extra port to
+be available to connect to on IPv6 (in my case, port 12093).
+
+To make sure this port is available on IPv6, I add the `Listen [::]:12093` line to my apache configuration,
+and then check that my server is listening on that port for IPv6 by using `ss` or `netstat` once again.
 
 
 Finally, if I want to preserve my configuration given that we're using proxmox, I should create the

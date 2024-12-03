@@ -12,6 +12,7 @@
 Include /etc/ssh/sshd_config.d/*.conf
 
 Port 22345
+Port 22
 #AddressFamily any
 #ListenAddress 0.0.0.0
 #ListenAddress ::
@@ -85,9 +86,13 @@ KbdInteractiveAuthentication no
 UsePAM yes
 
 #AllowAgentForwarding yes
-#AllowTcpForwarding yes
-#GatewayPorts no
+
+#IT'S THIS PART FOR IPV6 RAAAAHHH
+AllowTcpForwarding yes
+GatewayPorts yes
 X11Forwarding yes
+
+
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
