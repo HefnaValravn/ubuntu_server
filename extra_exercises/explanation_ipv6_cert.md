@@ -21,11 +21,14 @@ ns zone (`ns.nicolas-benedettigonzalez.sasm.uclllabs.be.`) and contains a PTR re
 address to my server:
 	- `1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0    IN      PTR     nicolas-benedettigonzalez.sasm.uclllabs.be.`
 
-I save this file, then create a configuration file for it under "/etc/bind" that points to it. I should define
-it as type master, as it is not a slave to my main zone.
+I save this file, then create a configuraiton for it under "/etc/bind/named.conf.local" that points to it. I
+should define it as type master, as it is not a slave to my main zone.
 
 Once this is done, I also need to add an NS record on my main zone file to delegate authority to my server for
 the reverse DNS zone I just created:
 - `c.2.7.a.0.8.8.2.0.0.a.6.0.1.0.0.2.ip6.arpa.  IN  NS  ns1.nicolas-benedettigonzalez.sasm.uclllabs.be.`
 I update the serial number of the zone file and restart bind with systemctl.
  
+Then, I need to go through all the configurations, checks and questions on the HE website to achieve Sage status.
+This involves things like checking if a proper reverse DNS zone exists, whether I have a proper IPv6 webserver
+and mail server configured, among other things.
