@@ -40,6 +40,7 @@ I create a ssh tunnel on my local machine that forwards incoming traffic on 127.
 
 - `ssh -vvv -D 127.0.0.1:1080 -C -N root@193.191.176.194`
 (the -vvv part doesn't actually matter, as it just enables logging)
+(should for whatever reason the command above not work, you can also use `ssh -vvv -p 22345 -D 127.0.0.1:1080 -C -N root@193.191.176.194`)
 
 Then I can go to my browser settings and configure a socks proxy where the address is 127.0.0.1, port 1080,
 and I use socksv5. This makes it so that all traffic coming into my device gets redirected through this ssh

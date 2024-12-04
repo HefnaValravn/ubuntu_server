@@ -5,4 +5,5 @@ ff02::2		ip6-allrouters
 # --- BEGIN PVE ---
 193.191.176.194 nicolas-benedettigonzalez.uclllabs.be nicolas-benedettigonzalez
 2001:6a8:2880:a020::c2 nicolas-benedettigonzalez.uclllabs.be nicolas-benedettigonzalez
+2001:6a8:2880:a7c2::1 nicolas-benedettigonzalez.uclllabs.be nicolas-benedettigonzalez nicolasbenedettigonzalez24.sasm.uclllabs.be
 # --- END PVE ---

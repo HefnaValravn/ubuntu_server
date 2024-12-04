@@ -21,3 +21,9 @@ zone "nicolas-benedettigonzalez.sasm.uclllabs.be" {
 //	grant "acme" zonesub _acme-challenge.nicolas-benedettigonzalez.sasm.uclllabs.be. TXT;
 //    };
 };
+
+
+zone "2.0.0.1.6.a.8.2.8.8.0.2.0.0.0.a.7.c.2.ip6.arpa" {
+    type master;
+    file "/etc/bind/zones/2.0.0.1.6.a.8.2.8.8.0.2.0.0.0.a.7.c.2.ip6.arpa.db";
+};

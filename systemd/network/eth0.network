@@ -2,11 +2,28 @@
 Name = eth0
 
 [Network]
-Description = Interface eth0 autoconfigured by PVE
+
+# IPv4 Configuration
 Address = 193.191.176.194/24
 Gateway = 193.191.176.254
+
+# Existing IPv6 Address Configuration
 Address = 2001:6a8:2880:a020::c2/64
 Gateway = 2001:6a8:2880:a020::fe
 
+# New IPv6 Address Configuration
+Address = 2001:6a8:2880:a7c2::1/64
+
 DHCP = no
 IPv6AcceptRA = false
+
+# Explicit Routes
+[Route]
+Destination = ::/0
+Table = 200
+Device = eth0
+
+# Routing Policy Rule for New IPv6
+[RoutingPolicyRule]
+From = 2001:6a8:2880:a7c2::1/128
+Table = 200
