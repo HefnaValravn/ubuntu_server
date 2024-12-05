@@ -1,3 +1,4 @@
-#!/bin/sh
-# Script to add static ARP entry for default gateway
-sudo /usr/sbin/arp -s 193.191.176.254 ca:fe:c0:ff:ee:00 -i eth0
+#!/bin/bash
+if [ "$IFACE" = "eth0" ]; then
+    sudo /usr/sbin/arp -s 193.191.176.254 ca:fe:c0:ff:ee:00 -i eth0
+fi
