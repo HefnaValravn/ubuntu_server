@@ -37,4 +37,5 @@ dovenull:x:111:116:Dovecot login user,,,:/nonexistent:/usr/sbin/nologin
 vmail:x:5000:5000::/var/vmail:/usr/sbin/nologin
 stunnel4:x:989:989:stunnel service system account:/var/run/stunnel4:/usr/sbin/nologin
 stunnel:x:1001:1001:,,,:/home/stunnel:/bin/bash
-ftp:x:112:117::/srv/ftp:/usr/sbin/nologin
+ftp:x:112:117:ftp daemon,,,:/srv/ftp:/usr/sbin/nologin
+ftpuser:x:5001:5001::/home/ftpusers:/sbin/nologin

@@ -17,7 +17,7 @@ yoda/
 !bind/named.conf.local
 !bind/named.conf.options
 !iptables/
-
+!pam.d/
 !apache2/sites-available/000-default.conf
 !apache2/sites-available/www1.conf
 !apache2/sites-available/www2.conf

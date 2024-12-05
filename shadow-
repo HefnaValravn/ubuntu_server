@@ -37,3 +37,5 @@ dovenull:!:20043::::::
 vmail:!:20043::::::
 stunnel4:!*:20049::::::
 stunnel:!:20049:0:99999:7:::
+ftp:!:20062::::::
+ftpuser:$y$j9T$Ft1Ni3TZvk9RnxDY08Zh1.$eLQPOf8RSjop0YK9eJe/m7mgtPGqeSGpYO4wgAYUkFA:20062:0:99999:7:::

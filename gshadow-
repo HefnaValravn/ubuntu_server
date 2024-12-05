@@ -66,3 +66,5 @@ dovenull:!::
 vmail:!::
 stunnel4:!*::stunnel4
 stunnel:!::
+ftp:!::
+ftpuser:!::

@@ -66,3 +66,5 @@ dovenull:x:116:
 vmail:x:5000:
 stunnel4:x:989:stunnel4
 stunnel:x:1001:
+ftp:x:117:
+ftpuser:x:5001:
