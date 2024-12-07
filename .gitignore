@@ -17,6 +17,9 @@ yoda/
 !bind/named.conf.local
 !bind/named.conf.options
 !iptables/
+!freeradius/3.0/users
+!freeradius/3.0/sites-available/control-socket
+!freeradius/3.0/sites-available/default
 
 !pam.d/
 !vsftpd.conf

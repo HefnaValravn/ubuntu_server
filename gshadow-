@@ -29,7 +29,7 @@ operator:*::
 list:*::
 irc:*::
 src:*::
-shadow:*::
+shadow:*::freerad
 utmp:*::
 video:*::
 sasl:*::
@@ -68,3 +68,5 @@ stunnel4:!*::stunnel4
 stunnel:!::
 ftp:!::
 ftpuser:!::
+mystery1_2014:!::
+freerad:!::

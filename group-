@@ -27,7 +27,7 @@ operator:x:37:
 list:x:38:
 irc:x:39:
 src:x:40:
-shadow:x:42:
+shadow:x:42:freerad
 utmp:x:43:
 video:x:44:
 sasl:x:45:
@@ -68,3 +68,5 @@ stunnel4:x:989:stunnel4
 stunnel:x:1001:
 ftp:x:117:
 ftpuser:x:5001:
+mystery1_2014:x:5002:
+freerad:x:118:
