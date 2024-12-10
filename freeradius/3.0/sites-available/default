@@ -286,7 +286,7 @@ authorize {
 
 	if (User-Name == "check") {
 		update control {
-			Tmp-String-0 := "%{debug:10}"
+			Tmp-String-0 := "%{debug:3}"
 			}
 		}
 
