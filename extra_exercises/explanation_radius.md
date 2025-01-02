@@ -10,7 +10,7 @@ Then, I created a user "check" and assigned him the password "Ch3ck" by editing 
 - `check Cleartext-Password := "Ch3ck"`
 
 Then, I open the "default" file under "/etc/freeradius/3.0/sites-available/" and add a condition block where if the username is "check",
-then the control module is modified like so: `Tmp-String-0 := "%{debug:10}"`. This sets the level of logging to the maximum (1-10), but
+then the control module is modified like so: `Tmp-String-0 := "%{debug:3}"`. This sets the level of logging to the maximum (1-10), but
 only for user check.
 
 Finally, I make sure that a few conditions are met in the radiusd.conf file, specifically in the log part:
