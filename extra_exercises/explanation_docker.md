@@ -21,8 +21,8 @@ on my browser to see the ordered list of the two youtube links I was supposed to
 Once that part of the assignment is done, I can make an account on dockerhub with the right username
 (PLEASE NOTE, SINCE I HAVE TWO SURNAMES AND THEY ARE BOTH RELATIVELY LONG I COULDN'T FIT MY ENTIRE NAME IN THE
 USERNAME. FOR THIS REASON, MY USERNAME ON DOCKERHUB IS "nicolasbenedettisasm2425" INSTEAD OF
-"nicolasbenedettigonzalezsasm2425". The public repository that the assignment image is found in is still called
-correctly, with both of my surnames and not just one.)
+"nicolasbenedettigonzalezsasm2425". The public repository that the assignment image is found in is therefore called
+'nicolasbenedettisasm2425/sasm_docker'.)
 
 Then, I can tag my image with the command `docker tag nginx:alpine nicolasbenedettisasm2425/sasm_docker:latest`, where
 "latest" is the tag I choose to give this image on my repository. Then I can push the image to the repository on
