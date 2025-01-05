@@ -14,7 +14,6 @@
 
 
   tasks:
-    # Install required packages
     - name: Install Apache and required packages
       apt:
         name:
@@ -38,7 +37,7 @@
         state: started
         enabled: true
 
-    # Default HTTP host
+
     - name: Create default webpage directory
       file:
         path: "{{ default_web_dir }}"
@@ -77,7 +76,7 @@
           </VirtualHost>
       notify: Restart Apache
 
-    # Virtual hosts for www1 and www2
+
     - name: Create www1 webpage
       file:
         path: "{{ www1_web_dir }}"
@@ -152,7 +151,7 @@
                   Require all granted
               </Directory>
 
-              DirectoryIndex toupper.php  # Set default file to toupper.php
+              DirectoryIndex toupper.php
           </VirtualHost>
       notify: Reload Apache
 
@@ -162,7 +161,7 @@
         - www1.conf
         - www2.conf
 
-    # Password protect /private directory
+
     - name: Create private directory
       file:
         path: "{{ private_dir }}"
@@ -177,13 +176,13 @@
           <VirtualHost *:80>
               ServerName secure.nicolas-benedettigonzalez.sasm.uclllabs.be
               Redirect permanent / https://secure.nicolas-benedettigonzalez.sasm.uclllabs.be/
-          </VirtualHost> 
+          </VirtualHost>
 
           <VirtualHost *:443>
               ServerName secure.nicolas-benedettigonzalez.sasm.uclllabs.be
               DocumentRoot /var/www/html/secure
 
-              SSLEngine on  
+              SSLEngine on
 
               SSLCertificateFile /root/.acme.sh/nicolas-benedettigonzalez.sasm.uclllabs.be_ecc/fullchain.cer
               SSLCertificateKeyFile /root/.acme.sh/nicolas-benedettigonzalez.sasm.uclllabs.be_ecc/nicolas-benedettigonzalez.sasm.uclllabs.be.key
