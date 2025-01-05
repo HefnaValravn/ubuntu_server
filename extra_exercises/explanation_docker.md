@@ -1,22 +1,19 @@
 
 For this exercise, I first need to set up Docker on windows to be able to run containers.
 
-After installing docker, I can create a .yaml compose file in which I specify:
+After installing docker, I can create a Dockerfile file in which I specify:
 
-- Under services and then web, I specify which image from dockerhub I want to use (in my case, a nginx webserver
-running on alpine linux)
-- the name of the container
-- the volumes being used (copying over the files from my own device to the server's directory)
-- the ports being used. I chose to use port 8080 on my machine because it's not a system port and it generally doesn't
-get used much.
+- Which image to use for the container
+- Which files in which directories on my machine to copy over to a specific directory on the container
+- Which port to use in the container for my webserver.
 
-Once that's done, I can create the directory I specified in the volumes part of the .yaml file and put the index.html
-file that I'll need for the assignment in there. Once this is done, I can run the command `docker-compose up -d` from
-a terminal in the same directory as the .yaml file to compose the container (-d is for detach, or make it run in the
-background).
+Once that's done, I can create the directory I specified in the volumes part of the Dockerfile and put the index.html
+file that I'll need for the assignment in there. Once this is done, I can run the command `docker build -t nginx-webserver .`,
+which builds the image, and then `docker run -d --name nginx-webserver -p 8080:80 nginx-webserver` to run the
+container.
 
 Once the container is up and running, I can verify its status from docker desktop, and go to `http://localhost:8080`
-on my browser to see the ordered list of the two youtube links I was supposed to add to the index file.
+on my browser to see the ordered list of the few youtube links I was supposed to add to the index file.
 
 Once that part of the assignment is done, I can make an account on dockerhub with the right username
 (PLEASE NOTE, SINCE I HAVE TWO SURNAMES AND THEY ARE BOTH RELATIVELY LONG I COULDN'T FIT MY ENTIRE NAME IN THE
@@ -24,7 +21,7 @@ USERNAME. FOR THIS REASON, MY USERNAME ON DOCKERHUB IS "nicolasbenedettisasm2425
 "nicolasbenedettigonzalezsasm2425". The public repository that the assignment image is found in is therefore called
 'nicolasbenedettisasm2425/sasm_docker'.)
 
-Then, I can tag my image with the command `docker tag nginx:alpine nicolasbenedettisasm2425/sasm_docker:latest`, where
+Then, I can tag my image with the command `docker tag nginx-webserver nicolasbenedettisasm2425/sasm_docker:latest`, where
 "latest" is the tag I choose to give this image on my repository. Then I can push the image to the repository on
 dockerhub with `docker push nicolasbenedettisasm2425/sasm_docker`, evidently after creating said public repository
 on dockerhub.
