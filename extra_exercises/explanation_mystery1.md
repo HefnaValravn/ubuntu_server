@@ -1,6 +1,6 @@
 For this exercise... well, I first have to find out what the exercise is about.
 To do this, I use tshark to sniff out packages coming from yoda and then query the mystery1 exercise to make the
-packages come through.
+packages come through. (`tshark -nli eth0 -f "not tcp port 22345" -s0 -w -`)
 Once this is done, I can inspect the captured packages with `tshark -r` and filter using yoda's ipv6 or ipv4.
 
 When I do this, I can observe that yoda is trying to access my server through TCP on port 21, which means it's trying
