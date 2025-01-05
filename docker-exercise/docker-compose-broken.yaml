@@ -1,0 +1,29 @@
+ version: '3'
+ service:
+    nextcloud:
+     image: nextcloud
+     restart: always
+     ports:
+       - 8080:8080
+     volumes:
+       - "nextcloud":/var/www/html
+     environments:
+       - POSTGRES_HOST=db
+       - POSTGRES_DB=nextcloud
+       - POSTGRES_USER=nextcloud
+       - POSTGRES_PASSWORD=nextcloud
+       - NEXTCLOUD_ADMIN_USER=admin
+       - NEXTCLOUD_ADMIN_PASS=verysecretpass
+   postgres:
+     image: postgres
+     restart: always
+     ports:
+       - 5432:5432
+     volumes:
+     - db:/var/lib/pgsql/data
+     environments:
+       - POSTGRES_DB=nextcloud
+       - POSTGRES_USER=nextcloud
+       - POSTGRES_PASSWORD=verysecretpass
+ volume:
+   db:

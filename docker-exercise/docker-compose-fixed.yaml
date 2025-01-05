@@ -1,0 +1,41 @@
+services:
+  nextcloud:
+    image: nextcloud
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=verysecretpass
+      # Change these environment variables to the correct format for Nextcloud
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=verysecretpass  # Changed from NEXTCLOUD_ADMIN_PASS
+      - NEXTCLOUD_TRUSTED_DOMAINS=localhost
+      # Add these PostgreSQL-specific variables
+      - MYSQL_HOST=
+      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_DB=nextcloud
+      - POSTGRESQL_USER=nextcloud
+      - POSTGRESQL_PASSWORD=verysecretpass
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=verysecretpass
+
+volumes:
+  nextcloud:
+  db:
